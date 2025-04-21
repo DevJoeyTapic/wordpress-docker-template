@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - "80:80"  # Changed from 8000 to 80
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppassword
+      WORDPRESS_DB_NAME: wpdatabase
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./php.ini:/usr/local/etc/php/conf.d/upload.ini
+
+  db:
+    image: mariadb:10.5
+    restart: always
+    environment:
+      MARIADB_DATABASE: wpdatabase
+      MARIADB_USER: wpuser
+      MARIADB_PASSWORD: wppassword
+      MARIADB_ROOT_PASSWORD: rootpassword
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  wordpress_data:
+  db_data:
